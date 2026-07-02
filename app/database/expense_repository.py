@@ -1,8 +1,12 @@
+from datetime import datetime, time
+
 from pymongo.collection import Collection
 
 from app.config import settings
 from app.database.connection import mongodb
 from typing import Optional
+
+from app.models.expense import Category
 
 class ExpenseRepository:
     """
@@ -40,13 +44,49 @@ class ExpenseRepository:
     
         return list(cursor)
     
-    def get_by_expense_id(self, expense_id: str):
+    def find_expenses(
+    self,
+    title: Optional[str] = None,
+    category: Optional[Category] = None,
+    amount: Optional[float] = None,
+    payment_method=None,
+    expense_date: Optional[datetime] = None,
+):
         """
-        Return a single expense.
+        Find expenses matching the given filters.
         """
-        return self.collection.find_one(
-            {"expense_id": expense_id},
-            {"_id": 0}
+    
+        query = {}
+    
+        if title:
+            query["title"] = {
+                "$regex": f"^{title}$",
+                "$options": "i"
+            }
+    
+        if category:
+            query["category"] = category.value
+    
+        if amount is not None:
+            query["amount"] = amount
+    
+        if payment_method:
+            query["payment_method"] = payment_method.value
+    
+        if expense_date:
+            start = datetime.combine(expense_date.date(), time.min)
+            end = datetime.combine(expense_date.date(), time.max)
+    
+            query["date"] = {
+                "$gte": start,
+                "$lte": end,
+            }
+    
+        return list(
+            self.collection.find(
+                query,
+                {"_id": 0}
+            )
         )
     
     def update(self, expense_id: str, updates: dict):

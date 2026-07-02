@@ -1,8 +1,9 @@
 from datetime import datetime
+from typing import Optional
 
 from app.database.counters import counter
 from app.database.expense_repository import expense_repository
-from app.models.expense import ExpenseCreate, ExpenseUpdate
+from app.models.expense import Category, ExpenseCreate, ExpenseUpdate
 
 class ExpenseService:
 
@@ -19,8 +20,11 @@ class ExpenseService:
         self.repo.create(expense_dict)
         return expense_dict
     
-    def list_expenses(self):
-        return self.repo.get_all()
+    def list_expenses(self,category: Optional[Category] = None,limit: Optional[int] = None,):
+        return self.repo.get_all(
+            category=category.value if category else None,
+            limit=limit,
+        )
     
     def get_expense(self, expense_id: str):
         return self.repo.get_by_expense_id(expense_id)

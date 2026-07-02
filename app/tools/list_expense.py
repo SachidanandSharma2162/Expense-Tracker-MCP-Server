@@ -11,16 +11,15 @@ def register_list_expense_tool(mcp: FastMCP):
     Register the list_expenses MCP tool.
     """
 
-    @mcp.tool(
-        name="list_expenses",
-        description="Retrieve expenses with optional filters."
-    )
+    @mcp.tool
     def list_expenses(
         category: Optional[Category] = None,
         limit: Optional[int] = None,
     ) -> dict:
         """
-        Returns expenses.
+        List down all the expenses based on the category.
+        Use this tool whenever the user wants to see the list of expenses,,
+        payment, bill, or any money spent.
         """
 
         expenses = expense_service.list_expenses(

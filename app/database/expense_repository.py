@@ -2,7 +2,7 @@ from pymongo.collection import Collection
 
 from app.config import settings
 from app.database.connection import mongodb
-
+from typing import Optional
 
 class ExpenseRepository:
     """
@@ -19,16 +19,26 @@ class ExpenseRepository:
         """
         return self.collection.insert_one(expense)
     
-    def get_all(self):
+    def get_all(self,category: Optional[str] = None,limit: Optional[int] = None,):
         """
-        Return all expenses.
+        Retrieve expenses with optional filtering.
         """
-        return list(
-            self.collection.find(
-                {},
-                {"_id": 0}
-            )
+    
+        query = {}
+    
+        if category:
+            query["category"] = category
+    
+        cursor = (
+            self.collection
+            .find(query, {"_id": 0})
+            .sort("date", -1)
         )
+    
+        if limit:
+            cursor = cursor.limit(limit)
+    
+        return list(cursor)
     
     def get_by_expense_id(self, expense_id: str):
         """

@@ -3,7 +3,7 @@ from typing import Optional
 
 from app.database.counters import counter
 from app.database.expense_repository import expense_repository
-from app.models.expense import Category, ExpenseCreate, ExpenseUpdate
+from app.models.expense import Category, ExpenseCreate, ExpenseUpdate, PaymentMethod
 
 class ExpenseService:
 
@@ -26,8 +26,25 @@ class ExpenseService:
             limit=limit,
         )
     
-    def get_expense(self, expense_id: str):
-        return self.repo.get_by_expense_id(expense_id)
+    def find_expenses(
+    self,
+    title: Optional[str] = None,
+    category: Optional[Category] = None,
+    amount: Optional[float] = None,
+    payment_method: Optional[PaymentMethod] = None,
+    expense_date: Optional[datetime] = None,
+):
+        """
+        Find expenses using the supplied filters.
+        """
+    
+        return self.repo.find_expenses(
+            title=title,
+            category=category,
+            amount=amount,
+            payment_method=payment_method,
+            expense_date=expense_date,
+        )
     
     def delete_expense(self, expense_id: str):
         return self.repo.delete(expense_id)

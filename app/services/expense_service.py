@@ -45,7 +45,83 @@ class ExpenseService:
             payment_method=payment_method,
             expense_date=expense_date,
         )
+    def resolve_single_expense(
+    self,
+    title=None,
+    category=None,
+    amount=None,
+    payment_method=None,
+    expense_date=None,
+):
+        """
+        Resolve a search into exactly one expense.
+        """
     
+        matches = self.find_expenses(
+            title=title,
+            category=category,
+            amount=amount,
+            payment_method=payment_method,
+            expense_date=expense_date,
+        )
+    
+        if not matches:
+            return {
+                "success": False,
+                "reason": "not_found",
+                "message": "No matching expense found.",
+            }
+    
+        if len(matches) > 1:
+            return {
+                "success": False,
+                "reason": "multiple_matches",
+                "message": "Multiple expenses matched.",
+                "matches": matches,
+            }
+    
+        return {
+            "success": True,
+            "expense": matches[0],
+        }
+    
+    def edit_expense(
+    self,
+    *,
+    title=None,
+    category=None,
+    amount=None,
+    payment_method=None,
+    expense_date=None,
+    updates: ExpenseUpdate,
+):
+        result = self.resolve_single_expense(
+            title=title,
+            category=category,
+            amount=amount,
+            payment_method=payment_method,
+            expense_date=expense_date,
+        )
+    
+        if not result["success"]:
+            return result
+    
+        expense = result["expense"]
+    
+        update_data = updates.model_dump(exclude_none=True)
+    
+        update_data["updated_at"] = datetime.now()
+    
+        success = self.repo.update_by_expense_id(
+            expense["expense_id"],
+            update_data,
+        )
+    
+        return {
+            "success": success,
+            "message": "Expense updated successfully.",
+        }
+
     def delete_expense(self, expense_id: str):
         return self.repo.delete(expense_id)
     

@@ -52,8 +52,9 @@ class ExpenseRepository:
        """
        Delete an expense.
        """
-       return self.collection.delete_one(
+       result= self.collection.delete_one(
            {"expense_id": expense_id}
        )
+       return result.deleted_count>0
     
 expense_repository = ExpenseRepository()

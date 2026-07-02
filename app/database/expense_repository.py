@@ -89,6 +89,22 @@ class ExpenseRepository:
             )
         )
     
+    def update_by_expense_id(
+    self,
+    expense_id: str,
+    updates: dict,
+) -> bool:
+        """
+        Update an expense using its expense_id.
+        """
+    
+        result = self.collection.update_one(
+            {"expense_id": expense_id},
+            {"$set": updates},
+        )
+    
+        return result.modified_count > 0
+
     def update(self, expense_id: str, updates: dict):
        """
        Update an existing expense.

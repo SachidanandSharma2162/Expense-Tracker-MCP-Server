@@ -156,5 +156,55 @@ class ExpenseService:
             "deleted_expense": expense,
         }
     
+    def get_overall_summary(self):
+        """
+        Return overall expense statistics.
+        """
+    
+        pipeline = [
+            {
+                "$group": {
+                    "_id": None,
+                    "total_spent": {
+                        "$sum": "$amount"
+                    },
+                    "expense_count": {
+                        "$sum": 1
+                    },
+                    "average_expense": {
+                        "$avg": "$amount"
+                    },
+                    "highest_expense": {
+                        "$max": "$amount"
+                    },
+                    "lowest_expense": {
+                        "$min": "$amount"
+                    }
+                }
+            }
+        ]
+    
+        result = self.repo.aggregate(pipeline)
+    
+        if not result:
+            return {
+                "success": True,
+                "summary": {
+                    "total_spent": 0,
+                    "expense_count": 0,
+                    "average_expense": 0,
+                    "highest_expense": 0,
+                    "lowest_expense": 0,
+                }
+            }
+    
+        summary = result[0]
+    
+        summary.pop("_id", None)
+    
+        return {
+            "success": True,
+            "summary": summary,
+        }
     
 expense_service = ExpenseService()

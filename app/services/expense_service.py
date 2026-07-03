@@ -155,20 +155,6 @@ class ExpenseService:
             "message": "Expense deleted successfully.",
             "deleted_expense": expense,
         }
-
-    def delete_expense(self, expense_id: str):
-        return self.repo.delete(expense_id)
     
-    def update_expense(self,expense_id: str,expense: ExpenseUpdate):
-        updates = expense.model_dump(
-            exclude_none=True
-        )
-    
-        updates["updated_at"] = datetime.now()
-    
-        return self.repo.update(
-            expense_id,
-            updates
-        )
     
 expense_service = ExpenseService()

@@ -118,6 +118,15 @@ class ExpenseRepository:
         )
     
         return result.deleted_count > 0
+    
+    def aggregate(self, pipeline: list):
+        """
+        Execute a MongoDB aggregation pipeline.
+        """
+    
+        return list(
+            self.collection.aggregate(pipeline)
+        )
 
     
 expense_repository = ExpenseRepository()

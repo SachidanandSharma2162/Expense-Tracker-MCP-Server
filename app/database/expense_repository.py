@@ -114,6 +114,19 @@ class ExpenseRepository:
            {"$set": updates}
        )
     
+    def delete_by_expense_id(self, expense_id: str) -> bool:
+        """
+        Delete an expense using its expense_id.
+        """
+    
+        result = self.collection.delete_one(
+            {
+                "expense_id": expense_id
+            }
+        )
+    
+        return result.deleted_count > 0
+    
     def delete(self, expense_id: str):
        """
        Delete an expense.

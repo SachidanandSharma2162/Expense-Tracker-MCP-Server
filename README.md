@@ -82,12 +82,6 @@ expense-tracker-mcp/
 │   │   ├── edit_expense.py
 │   │   ├── delete_expense.py
 │   │   ├── summarize.py
-│   │   └── credits.py
-│
-│   └── utils/
-│       ├── constants.py
-│       ├── validators.py
-│       └── helpers.py
 │
 ├── .env
 ├── main.py

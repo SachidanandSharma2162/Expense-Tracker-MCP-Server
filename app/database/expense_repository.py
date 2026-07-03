@@ -104,15 +104,7 @@ class ExpenseRepository:
         )
     
         return result.modified_count > 0
-
-    def update(self, expense_id: str, updates: dict):
-       """
-       Update an existing expense.
-       """
-       return self.collection.update_one(
-           {"expense_id": expense_id},
-           {"$set": updates}
-       )
+    
     
     def delete_by_expense_id(self, expense_id: str) -> bool:
         """
@@ -126,14 +118,6 @@ class ExpenseRepository:
         )
     
         return result.deleted_count > 0
-    
-    def delete(self, expense_id: str):
-       """
-       Delete an expense.
-       """
-       result= self.collection.delete_one(
-           {"expense_id": expense_id}
-       )
-       return result.deleted_count>0
+
     
 expense_repository = ExpenseRepository()

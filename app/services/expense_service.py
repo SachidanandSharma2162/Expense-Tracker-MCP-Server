@@ -45,6 +45,7 @@ class ExpenseService:
             payment_method=payment_method,
             expense_date=expense_date,
         )
+    
     def resolve_single_expense(
     self,
     title=None,
@@ -120,6 +121,39 @@ class ExpenseService:
         return {
             "success": success,
             "message": "Expense updated successfully.",
+        }
+    
+    def delete_expense(
+    self,
+    *,
+    title=None,
+    category=None,
+    amount=None,
+    payment_method=None,
+    expense_date=None,
+):
+
+        result = self.resolve_single_expense(
+            title=title,
+            category=category,
+            amount=amount,
+            payment_method=payment_method,
+            expense_date=expense_date,
+        )
+    
+        if not result["success"]:
+            return result
+    
+        expense = result["expense"]
+    
+        success = self.repo.delete_by_expense_id(
+            expense["expense_id"]
+        )
+    
+        return {
+            "success": success,
+            "message": "Expense deleted successfully.",
+            "deleted_expense": expense,
         }
 
     def delete_expense(self, expense_id: str):

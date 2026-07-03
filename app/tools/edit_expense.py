@@ -16,14 +16,7 @@ def register_edit_expense_tool(mcp: FastMCP):
     Register the edit_expense MCP tool.
     """
 
-    @mcp.tool(
-        name="edit_expense",
-        description="""
-        Update an expense by searching for it.
-        The expense can be identified using title,
-        category, amount, payment method and/or date.
-        """
-    )
+    @mcp.tool
     def edit_expense(
         title: Optional[str] = None,
         category: Optional[Category] = None,
@@ -39,6 +32,9 @@ def register_edit_expense_tool(mcp: FastMCP):
     ) -> dict:
         """
         Edit an existing expense.
+        Update an expense by searching for it.
+        The expense can be identified using title,
+        category, amount, payment method and/or date.
         """
 
         updates = ExpenseUpdate(

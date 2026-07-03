@@ -15,13 +15,7 @@ def register_delete_expense_tool(mcp: FastMCP):
     Register the delete_expense MCP tool.
     """
 
-    @mcp.tool(
-        name="delete_expense",
-        description="""
-        Delete an expense by searching for it.
-        You do not need to know the expense ID.
-        """
-    )
+    @mcp.tool
     def delete_expense(
         title: Optional[str] = None,
         category: Optional[Category] = None,
@@ -29,7 +23,9 @@ def register_delete_expense_tool(mcp: FastMCP):
         payment_method: Optional[PaymentMethod] = None,
         expense_date: Optional[str] = None,
     ) -> dict:
-
+        """
+        Delete an expense by searching for it.
+        You do not need to know the expense ID."""
         return expense_service.delete_expense(
             title=title,
             category=category,

@@ -109,7 +109,7 @@ expense-tracker-mcp/
 ## Clone Repository
 
 ```bash
-git clone https://github.com/SachidanandSharma2162/expense-tracker-mcp.git
+git clone https://github.com/SachidanandSharma2162/Expense-Tracker-MCP-Server
 
 cd expense-tracker-mcp
 ```
